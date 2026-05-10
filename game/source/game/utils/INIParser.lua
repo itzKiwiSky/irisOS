@@ -16,25 +16,21 @@ function INIParser.decode(str)
         line = line:match("^%s*(.-)%s*$")
 
         if line ~= "" then
-            local tempSection =
-                line:match("^%[([^%[%]]+)%]$")
+            local tempSection = line:match("^%[([^%[%]]+)%]$")
 
             if tempSection then
-                section = tonumber(tempSection)
-                    or tempSection
+                section = tonumber(tempSection) or tempSection
 
-                data[section] =
-                    data[section] or {}
+                data[section] = data[section] or {}
             else
-                local param, value =
-                    line:match("^([%w_]+)%s-=%s-(.+)$")
+                local param, value = line:match("^([%w_]+)%s-=%s-(.+)$")
 
                 if param and value ~= nil then
                     if tonumber(value) then
                         value = tonumber(value)
-                    elseif value == "true" then
+                    elseif value:match("true") or value:match("enabled") then
                         value = true
-                    elseif value == "false" then
+                    elseif value:match("false") or value:match("disabled") then
                         value = false
                     end
 
